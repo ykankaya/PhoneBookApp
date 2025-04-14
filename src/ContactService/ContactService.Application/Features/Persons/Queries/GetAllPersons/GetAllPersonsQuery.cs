@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ContactService.Application.Features.Persons.DTOs;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace ContactService.Application.Features.Persons.Queries.GetAllPersons
 {
-  internal class GetAllPersonsQuery
+  public class GetAllPersonsQuery : IRequest<List<PersonDto>>
   {
+
   }
 }
