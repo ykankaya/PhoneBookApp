@@ -1,0 +1,83 @@
+{
+  "Routes": [
+    // --- ContactService Routes ---
+    {
+      "DownstreamPathTemplate": "/api/persons",
+      "DownstreamScheme": "http", // ContactService'in çalýþtýðý scheme (genellikle http yerelde)
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost", // ContactService'in çalýþtýðý host
+          "Port": 5048 // ContactService'in HTTP portu!
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/persons", // Gateway üzerinden eriþilecek path
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/persons/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5048
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/persons/{id}",
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/persons/{id}/contacts",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5048
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/persons/{id}/contacts",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/persons/{personId}/contacts/{contactId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5048
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/persons/{personId}/contacts/{contactId}",
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    // --- ReportService Routes ---
+    {
+      "DownstreamPathTemplate": "/api/reports",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost", // ReportService'in çalýþtýðý host
+          "Port": 5188 // ReportService'in HTTP portu!
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/reports",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/reports/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5188
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/reports/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    // Gateway'in kendi base URL'i (opsiyonel, genellikle Kestrel ayarlarý kullanýlýr)
+    // "BaseUrl": "http://localhost:5000"
+  }
+}

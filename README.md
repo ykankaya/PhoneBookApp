@@ -4,6 +4,9 @@ Bu proje, .NET Core kullanılarak geliştirilmiş, basit bir telefon rehberi uyg
 
 ## Özellikler
 
+*   **API Gateway (Ocelot):**
+    *   Tüm istemci istekleri için tek giriş noktası.
+    *   İstekleri ilgili arka plan servisine (ContactService veya ReportService) yönlendirme.
 *   **Kişi Yönetimi (ContactService):**
     *   Rehbere kişi ekleme, silme.
     *   Kişilere iletişim bilgisi (telefon, email, konum) ekleme, silme.
