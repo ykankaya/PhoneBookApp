@@ -1,8 +1,6 @@
 using Carter;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ContactService.Infrastructure.Persistence.Context;
-using ContactService.Application; 
 
 var builder = WebApplication.CreateBuilder(args);
 

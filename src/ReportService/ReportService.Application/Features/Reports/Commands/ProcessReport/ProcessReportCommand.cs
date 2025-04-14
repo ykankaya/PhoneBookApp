@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace ReportService.Application.Features.Reports.Commands.ProcessReport
 {
-  internal class ProcessReportCommand
+  public class ProcessReportCommand : IRequest<Unit>
   {
+    public Guid ReportId { get; set; }
+
+    public ProcessReportCommand(Guid reportId)
+    {
+      ReportId = reportId;
+    }
   }
 }

@@ -1,8 +1,11 @@
 using Carter;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ReportService.Infrastructure.Persistence.Context;
-using System.Reflection;
+using ReportService.Application.Interfaces.Infrastructure;
+using ReportService.Infrastructure.Messaging;
+using ReportService.Application.Features.Reports.Commands.ProcessReport;
+using ReportService.Api.Workers;
+using ReportService.Application.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +28,15 @@ builder.Services.AddCarter();
 
 builder.Services.AddHttpClient();
 
-// TODO: Kafka Producer/Consumer Configuration ve Servis Kayýtlarý eklenecek
-// builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
-// builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>(); // Örnek
-// builder.Services.AddHostedService<ReportRequestConsumerWorker>(); // Örnek
+builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+builder.Services.Configure<ContactServiceOptions>(builder.Configuration.GetSection("ContactService"));
+
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+builder.Services.AddHostedService<ReportRequestConsumerWorker>();
 
 
 builder.Services.AddEndpointsApiExplorer();

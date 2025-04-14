@@ -2,28 +2,26 @@
 using ReportService.Application.Interfaces.Persistence;
 using ReportService.Domain.Entities;
 using ReportService.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Microsoft.Extensions.Options;
+using ReportService.Application.Configuration;
+using ReportService.Application.Interfaces.Infrastructure;
 namespace ReportService.Application.Features.Reports.Commands.RequestReport
 {
   public class RequestReportCommandHandler : IRequestHandler<RequestReportCommand, Guid>
   {
     private readonly IReportDbContext _context;
-    // TODO: Kafka Producer'ı enjekte et (örnek: IKafkaProducer _producer;)
+    private readonly IKafkaProducer _producer; 
+    private readonly KafkaOptions _kafkaOptions; 
 
-    public RequestReportCommandHandler(IReportDbContext context /*, IKafkaProducer producer */)
+    public RequestReportCommandHandler(IReportDbContext context, IKafkaProducer producer, IOptions<KafkaOptions> kafkaOptions)
     {
       _context = context;
-      // _producer = producer;
+      _producer = producer;
+      _kafkaOptions = kafkaOptions.Value; 
     }
 
     public async Task<Guid> Handle(RequestReportCommand request, CancellationToken cancellationToken)
     {
-   
       var newReport = new Report
       {
         Id = Guid.NewGuid(),
@@ -31,15 +29,22 @@ namespace ReportService.Application.Features.Reports.Commands.RequestReport
         Durum = ReportStatus.Hazirlaniyor
       };
 
-      // 2. Veritabanına kaydet
       await _context.Reports.AddAsync(newReport, cancellationToken);
-      await _context.SaveChangesAsync(cancellationToken);
+      await _context.SaveChangesAsync(cancellationToken); 
+      
+      try
+      {
+  
+        await _producer.ProduceAsync(_kafkaOptions.ReportRequestTopic, newReport.Id.ToString(), cancellationToken);
+        Console.WriteLine($"Kafka'ya olay gönderildi: ReportRequested, ReportId: {newReport.Id}");
+      }
+      catch (Exception ex)
+      {
+      
+        Console.WriteLine($"Kafka'ya mesaj gönderilirken hata oluştu: {ex.Message}");
 
-      // 3. Kafka'ya rapor talebi olayını gönder (Report ID ile birlikte)
-      // Gerçek Kafka Producer implementasyonu burada çağrılacak.
-      // Şimdilik loglama veya simülasyon yapabiliriz.
-      Console.WriteLine($"Kafka'ya gönderilecek olay: ReportRequested, ReportId: {newReport.Id}");
-      // await _producer.ProduceAsync("report-requests", newReport.Id.ToString(), cancellationToken); // Gerçek implementasyon
+      }
+
 
       return newReport.Id;
     }

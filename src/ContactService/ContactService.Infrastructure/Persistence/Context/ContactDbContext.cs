@@ -2,8 +2,6 @@
 using ContactService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ContactService.Infrastructure.Persistence.Context
 {
