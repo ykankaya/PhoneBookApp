@@ -1,10 +1,13 @@
 using Carter;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ReportService.Infrastructure.Persistence.Context;
 using ReportService.Application.Interfaces.Infrastructure;
 using ReportService.Infrastructure.Messaging;
 using ReportService.Application.Features.Reports.Commands.ProcessReport;
 using ReportService.Api.Workers;
+using ReportService.Application.Common.Behaviours;
 using ReportService.Application.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +24,10 @@ builder.Services.AddDbContext<ReportDbContext>(options =>
 
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ReportService.Application.AssemblyMarker).Assembly));
+builder.Services.AddValidatorsFromAssembly(typeof(ReportService.Application.AssemblyMarker).Assembly);
 
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 builder.Services.AddCarter();
 
@@ -44,7 +50,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
+app.UseMiddleware<ReportService.Api.Middleware.ExceptionHandlerMiddleware>();
 if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
