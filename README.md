@@ -30,7 +30,6 @@ Bu proje, .NET Core kullanılarak geliştirilmiş, basit bir telefon rehberi uyg
 *   **Validasyon:** FluentValidation.
 *   **Mimari Desen:** Clean Architecture prensiplerine uygun katmanlı yapı (Domain, Application, Infrastructure, Api).
 
-![Mimari Şeması (Opsiyonel - Buraya bir çizim linki veya dosyası ekleyebilirsiniz)](placeholder_diagram.png)
 
 ## Kullanılan Teknolojiler
 
