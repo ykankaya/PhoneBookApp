@@ -9,7 +9,10 @@ using ReportService.Application.Features.Reports.Commands.ProcessReport;
 using ReportService.Api.Workers;
 using ReportService.Application.Common.Behaviours;
 using ReportService.Application.Configuration;
-
+using Polly; 
+using Polly.Extensions.Http; 
+using System; 
+using System.Net.Http; 
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -37,6 +40,28 @@ builder.Services.AddHttpClient();
 builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
 builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 builder.Services.Configure<ContactServiceOptions>(builder.Configuration.GetSection("ContactService"));
+
+// hata durumunda retry mekanizması için polly
+// static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+// {
+//
+//     return HttpPolicyExtensions
+//         .HandleTransientHttpError() 
+//         .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound) 
+//         .WaitAndRetryAsync(
+//             retryCount: 3,
+//             sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+//             onRetry: (outcome, timespan, retryAttempt, context) => 
+//             {
+//                 Console.WriteLine($"ContactService çağrısı başarısız oldu ({outcome.Result?.StatusCode}), {timespan.TotalSeconds} saniye sonra {retryAttempt}. deneme yapılacak. Context: {context.OperationKey}");
+//             });
+// }
+
+
+// builder.Services.AddHttpClient("ContactServiceClient", client =>
+//     {
+//     })
+//     .AddPolicyHandler(GetRetryPolicy());
 
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 builder.Logging.AddConsole();
