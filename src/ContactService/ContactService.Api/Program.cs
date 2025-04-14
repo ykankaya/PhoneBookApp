@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using ContactService.Infrastructure.Persistence.Context;
 using FluentValidation; 
 using MediatR; 
-using ContactService.Application.Common.Behaviours; 
+using ContactService.Application.Common.Behaviours;
+using ContactService.Application.Interfaces.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -18,6 +20,7 @@ builder.Services.AddDbContext<ContactDbContext>(options =>
           sqlOptions.MigrationsAssembly(typeof(ContactDbContext).Assembly.FullName);
         }));
 
+builder.Services.AddScoped<IContactDbContext>(provider => provider.GetRequiredService<ContactDbContext>());
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ContactService.Application.AssemblyMarker).Assembly));
@@ -25,7 +28,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddValidatorsFromAssembly(typeof(ContactService.Application.AssemblyMarker).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddCarter();
-
+builder.Services.AddHttpClient();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

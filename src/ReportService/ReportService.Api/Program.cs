@@ -13,6 +13,10 @@ using Polly;
 using Polly.Extensions.Http; 
 using System; 
 using System.Net.Http; 
+using ReportService.Infrastructure.Persistence.Context; // ReportDbContext için
+using ReportService.Application.Interfaces.Persistence; // IReportDbContext için
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -22,10 +26,10 @@ builder.Services.AddDbContext<ReportDbContext>(options =>
     options.UseNpgsql(connectionString,
         npgsqlOptionsAction: sqlOptions =>
         {
-          sqlOptions.MigrationsAssembly(typeof(ReportDbContext).Assembly.FullName);
+            sqlOptions.MigrationsAssembly(typeof(ReportDbContext).Assembly.FullName);
         }));
 
-
+builder.Services.AddScoped<IReportDbContext>(provider => provider.GetRequiredService<ReportDbContext>());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ReportService.Application.AssemblyMarker).Assembly));
 builder.Services.AddValidatorsFromAssembly(typeof(ReportService.Application.AssemblyMarker).Assembly);
 
