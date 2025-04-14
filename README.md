@@ -116,13 +116,13 @@ Bu proje, .NET Core kullanılarak geliştirilmiş, basit bir telefon rehberi uyg
     ```bash
     dotnet run --project ./src/ContactService/ContactService.Api/
     ```
-    *Not: Varsayılan olarak `http://localhost:5048`  port ile çalışacaktır (launchSettings.json kontrol edin).*
+    *Not: Varsayılan olarak https://localhost:7298;http://localhost:5048  portlarda çalışacaktır (launchSettings.json kontrol edin).*
 
 2.  **ReportService'i Başlat:**
     ```bash
     dotnet run --project ./src/ReportService/ReportService.Api/
     ```
-    *Not: Varsayılan olarak `http://localhost:5188`  port ile çalışacaktır (launchSettings.json kontrol edin).*
+    *Not: Varsayılan olarak https://localhost:7261;http://localhost:5188  portlarda çalışacaktır (launchSettings.json kontrol edin).*
 
 **Yöntem 2: Docker Compose ile (Eğer `docker-compose.yml` dosyası varsa)**
 
