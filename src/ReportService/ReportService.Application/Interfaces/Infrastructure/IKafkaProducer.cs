@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ReportService.Application.Interfaces.Infrastructure
+﻿namespace ReportService.Application.Interfaces.Infrastructure
 {
-  internal class IKafkaProducer
+  public interface IKafkaProducer : IDisposable 
   {
+    Task ProduceAsync(string topic, string message, CancellationToken cancellationToken = default);
   }
 }

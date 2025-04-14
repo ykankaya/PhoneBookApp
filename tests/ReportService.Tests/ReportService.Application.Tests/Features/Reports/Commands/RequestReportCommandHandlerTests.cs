@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ReportService.Application.Tests.Features.Reports.Commands
+﻿namespace ReportService.Application.Tests.Features.Reports.Commands
 {
   internal class RequestReportCommandHandlerTests
   {

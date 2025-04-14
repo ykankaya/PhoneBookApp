@@ -1,9 +1,4 @@
-﻿using ContactService.Domain.Enums; 
-using System;
-using System.Collections.Generic;
-
-
-namespace ContactService.Domain.Entities
+﻿namespace ContactService.Domain.Entities
 {
   public class Person
   {

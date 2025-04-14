@@ -1,5 +1,4 @@
 ﻿using ContactService.Domain.Enums;
-using System;
 
 namespace ContactService.Domain.Entities
 {

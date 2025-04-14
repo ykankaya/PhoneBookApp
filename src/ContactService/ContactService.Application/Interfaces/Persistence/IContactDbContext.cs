@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ContactService.Domain.Entities;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ContactService.Application.Interfaces.Persistence
 {

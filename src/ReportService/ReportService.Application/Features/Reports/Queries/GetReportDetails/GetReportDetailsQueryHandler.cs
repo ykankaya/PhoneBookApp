@@ -3,11 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using ReportService.Application.Features.Reports.DTOs;
 using ReportService.Application.Interfaces.Persistence;
 using ReportService.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReportService.Application.Features.Reports.Queries.GetReportDetails
 {

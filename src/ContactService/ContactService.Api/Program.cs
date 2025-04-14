@@ -1,9 +1,10 @@
 using Carter;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ContactService.Infrastructure.Persistence.Context;
-using ContactService.Application; 
-
+using FluentValidation; 
+using MediatR; 
+using ContactService.Application.Interfaces.Persistence;
+using ContactService.Api.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -18,19 +19,23 @@ builder.Services.AddDbContext<ContactDbContext>(options =>
           sqlOptions.MigrationsAssembly(typeof(ContactDbContext).Assembly.FullName);
         }));
 
+builder.Services.AddScoped<IContactDbContext>(provider => provider.GetRequiredService<ContactDbContext>());
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ContactService.Application.AssemblyMarker).Assembly));
 
-builder.Services.AddCarter();
+builder.Services.AddValidatorsFromAssembly(typeof(ContactService.Application.AssemblyMarker).Assembly);
 
+builder.Services.AddCarter();
+builder.Services.AddHttpClient();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
-
+app.UseMiddleware<ContactService.Api.Middleware.ExceptionHandlerMiddleware>();
+app.MapCarter();
 
 if (app.Environment.IsDevelopment())
 {
@@ -38,6 +43,6 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
-app.MapCarter();
+
 
 app.Run();
